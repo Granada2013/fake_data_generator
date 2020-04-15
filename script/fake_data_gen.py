@@ -1,11 +1,11 @@
-from mimesis import Generic
-from mimesis import locales
+from mimesis import Generic, locales
 from mimesis.enums import Gender
 from random import randint, choice
 import csv
 
 
 def generate_user() -> dict:
+    """Создание случайного фейкового пользователя"""
     loc = tuple(locales.SUPPORTED_LOCALES.keys())
     gender = {Gender.FEMALE: 'Female', Gender.MALE: 'Male'}
     user = Generic()
@@ -23,13 +23,21 @@ def generate_user() -> dict:
 
 
 def create_csv(path: str, n: int):
+    """Создание csv-файла с данными об n фейковых пользователях"""
     with open(path, 'w', encoding='utf-8') as file:
-        writer = csv.DictWriter(file, ['nickname', 'first_name', 'last_name', 'gender', 'age', 'country', 'profile_pic'])
+        writer = csv.DictWriter(file,
+                                ['nickname', 'first_name', 'last_name', 'gender', 'age', 'country', 'profile_pic'])
         writer.writeheader()
         for _ in range(n):
             writer.writerow(generate_user())
 
 
+def selftest():
+    create_csv('fake_users.csv', 20)
+    with open('fake_users.csv', encoding='utf-8') as file:
+        for line in file:
+            print(line)
 
 
-
+if __name__ == '__main__':
+    selftest()
